@@ -1,0 +1,431 @@
+capstone_case_study
+Franklin B.A.
+2023-02-09
+# portfolio_data_analyst
+First analysis. The capstone project from the Google Career Certificate as a Data Analyst.   
+Hello, everyone. This is my first analysis from the capstone project of the Google Career Certificate as a Data Analyst. 
+To perform this analysis, I followed Google’s methodology: Ask, Prepare, Process, Analyse, Share, and Act.
+Using the database from https://www.kaggle.com/datasets/arashnic/fitbit.
+Business task: *Analyze trends and find insights from customers’ use of devices, to influence a successful marketing campaign that can lead Bellabeat to unlock new growth opportunities.*
+Ask-
+Guiding questions
+•	What is the problem I am trying to solve?
+A/  I want to solve the problem of understanding how customers use similar devices like Bellabeat's. 
+•	How can my insights drive business decisions?
+A/ By identifying the trends that most affect users of wearables and that can apply to our customers, we can tailor our marketing campaign. 
+Key Task 
+1.	Identify the business task.
+A/
+Business task: Analyze trends and find insights from customers’ use of devices, to influence a successful marketing campaign that can lead Bellabeat to unlock new growth opportunities. 
+
+2.	Consider key stakeholders. 
+A/
+Key stakeholders:
+ a.Urska Srsen: CCO.
+b.Sando Mur: Cofounder.
+c.Bellabeat marketing analytics team
+Deliverable
+Analyze the trends and find insights from customers’ use of devices, to influence a successful marketing campaign. 
+
+Prepare
+Guiding question
+•	Where is the data stored?
+A/ I have the data stored on my PC, but it is also available on Kaggle.
+•	How is the data organized?
+A/ The data is organized in a wide format. 
+•	Are there issues with bias or credibility in this data? 
+A/ I consider that this data has most of the ROCCC parameters. It could be Reliable because it comes from a different company that works in the same area as Bellabeat (Fitbit). It is not originally from Bellabeat, but it still gives us an idea of the trends. The Data is also Comprehensive because it is organized in a specific format. The dates are not current for the expected time of analysis. Finally, it is cited by the company Fitbit. 
+•	How are you addressing licensing, privacy, security, and accessibility?
+A/ I will cite the origin of this data, but since it is from an open-source site, it is accessible to anyone.
+•	How did you verify the data’s integrity?
+A/ I will make copies of the original dataset and keep copies of the datasets I use during the cleaning process. 
+•	How does it help you answer your question?
+A/ It has enough data points to identify trends and may lead to valuable insights about user behavior.
+•	Are there any problems with the data?
+A/ The data is separated into different sheets. 
+Key task
+1. Download data and store it appropriately. 
+2. Identify how it’s organized. 
+3. Sort and filter the data. 
+4. Determine the credibility of the data.
+Deliverable
+The data to be used in this case study is organized mainly by the ID number of the users, some date of the activity, and a third variable divided by daily, hourly, minutes and weight log. 
+
+
+daily_activity_merged	
+Id, activity_date, total_steps,, total_distance, tracker_distance, logged_activities_distance, very_active_distance, moderately_active_distance, light_active_distance, sedentary_active_distance, very_active_minutes, fairly_active_minutes, lightly_active_minutes, sedentary_minutes, calories
+
+heartrate_seconds_merged	
+Id, time, date, value
+
+Hourly_activity	
+Id, hour, date, step_total, calories, total_intensity, average_intensity
+
+minute_METs_narrow_merged
+Id, activity_minute, date, METs
+minute_sleep_merged	Id,date, hour, value, logId
+
+minute_sleep_merged	
+Id, sleep_day, hour, total_sleep_records, total_minutes_asleep, total_time_in_bed
+
+weightLogInfo_merged	
+Id, hour	date, weight_kg,  weight_pounds, fat, BMI, is_manual_report, log_id
+
+Process
+Guiding questions
+•	What tools are you choosing and why?
+A/Initially I will use Excel to merge some of the sheets that have in common ID and Hours and dates.I will use R to continue with the cleaning, proceed to exploratory analysis, and finalize creating some data viz. 
+•	Have you ensured your data’s integrity? 
+A/ Yes I have. 
+•	What steps have you taken to ensure that your data is clean? 
+A/
+
+•	 How can you verify that your data is clean and ready to analyze? 
+•	 Have you documented your cleaning process so you can review and share those results?
+Key task
+1. Check the data for errors.
+2. Choose your tools.
+3. Transform the data so you can work with it effectively.
+4. Document the cleaning process.
+Deliverable
+Documentation of the cleaning process and data manipulation:
+
+## To follow the instructions of ______________’s tutorial, I merged three different spreadsheets (hourlycalories, hourlyintensities and hourlysteps) into one by finding their common columns and adding their unique columns (hourly_activity). 
+o	I added the spreadsheet data by opening it from Excel using the tool “Get data from text/CSV” and selecting the first spreadsheet, “hourlycalories.”
+o	I repeated the same process to get the three spreadsheets in the same archive, naming each tab with the same original spreadsheet name. Then, I named the newly merged spreadsheet “hourly_activity”
+o	To merge the different spreadsheets I used the Excel tool “Query, Merge,” selecting the tables and the matching columns I wanted to Merge. (id, ActivityHour). 
+o	It opens a Power Query editor window. In the new table created, I choose to unselect the two repeated columns (id, activityhour) and unselect “use original column name as prefix.” 
+o	From the Power Query Editor, I used the “Combine, Merge Queries” tool to merge the third spreadsheet and repeated the same process. 
+o	Finally, I chose the “Close and load” tool to open the new spreadsheet in my Excel archive. 
+
+
+## Then, I recognized the datasets that could be relevant to my analysis. In this case, and following the tutorial from ______________, I choose seven spreadsheets. 
+
+daily_activity_merged
+heartrate_seconds_merged
+Hourly_activity
+minute_METs_narrow_merged
+minute_sleep_merged
+sleepDay_merged
+weightLogInfo_merged
+
+
+## Now, I started with the cleaning process with Excel.
+I started by giving all the headers a consistent format (id, hour, total_intensity) using lowercase, and instead of spaces, I used a lower dash. 
+
+## At this point, I identified that the date and hour were merged in some spreadsheets. It was a good idea to separate these two values for better analysis. I create a new column with the name “hour.” Using the function =int(), I separate the date value from the merged cell. Then I format the entire column as “Short Date.” In the already merged column, I just changed its format to “Hour,” which displays the hour information. 
+
+## Then, to start with the exploration with the spread sheet called sleepDay_merged. I wanted to determine if the total steps of a day could affect the amount of sleep. 
+o	First, I determine how many hours of sleep were measured each day, creating a new column and making an arithmetic function dividing the “total_minuntes_sleep” in 60. I named the new column as “total_hours_sleep.”
+o	Then, using the function “=if()” determine if the amount of sleep hours was, Sufficient, Insufficient or excessive. I created a new column called “sleep_amount.”
+To continue the process of cleaning, then following the tutorial by ___________ I jumped into the BigQuery tool. 
+	## From the BigQuery working space, I created a new project called “capstone_case_study.” Then, I created a new dataset called “Data_fitbit,” where I uploaded the seven spreadsheets creating seven different tables with the same name as the respective spreadsheet. 
+BigQuery cleaning process 
+
+-- Calculate the number of users and their daily average 
+
+--1)Track physical activity
+
+SELECT
+ COUNT(DISTINCT id) AS total_users_daily_activity,
+ AVG(total_steps) AS average_steps,
+ AVG(total_distance) AS average_distance,
+ AVG(calories) AS averga_calories
+FROM
+ `capstone-case-study-377115.Data_fitbit.daily_activity_merged`
+
+--2) Track heart rate
+
+(SELECT
+ COUNT(DISTINCT id) AS total_users_hr,
+ AVG(value) AS average_hr,
+ MAX(value) AS max_hr,
+ MIN(value) AS min_hr
+FROM
+ `capstone-case-study-377115.Data_fitbit.heartrate_seconds_merged` )
+
+-- 3) Track sleep
+
+SELECT
+ COUNT(DISTINCT id) AS total_users_sleep,
+ AVG(total_minutes_asleep)/60 AS average_hours_sleep,
+ MIN(total_minutes_asleep)/60 AS min_hours_sleep,
+ MAX(total_minutes_asleep)/60 AS max_hours_sleep,
+ AVG(total_time_in_bed)/60 as average_hours_in_bed
+ 
+FROM
+ `capstone-case-study-377115.Data_fitbit.sleep_day_merged`
+
+
+--4) Track weight
+
+SELECT
+ COUNT(DISTINCT id) AS total_users_wt,
+ AVG(weight_pounds) AS average_weight_pounds,
+ MAX(weight_pounds) AS max_weight,
+ MIN(weight_pounds) AS min_weight,
+ AVG(BMI) AS average_BMI,
+ MAX(BMI) AS max_BMI,
+ MIN(BMI) AS min_BMI
+
+FROM
+ `capstone-case-study-377115.Data_fitbit.weight_log_info_merged`
+
+--5) Tracked days of physical activity per id BETWEEN '2016-01-01' AND '2016-08-01'
+
+SELECT 
+id,
+COUNT (DISTINCT EXTRACT(DAY FROM activity_date)) AS days,
+ 
+FROM `capstone-case-study-377115.Data_fitbit.daily_activity_merged`
+
+WHERE
+ activity_date BETWEEN '2016-01-01' AND '2016-08-01'
+
+GROUP BY  
+id
+ORDER BY
+days DESC
+
+--6) Select the average of weeks and months OF ACTIVITY RECORDED. 
+
+SELECT
+AVG(days/7.00) AS weeks_activity_recorded,
+avg(days/31.00) AS months_activity_recorded
+FROM 
+`capstone-case-study-377115.Data_fitbit.days_physical_activity_per_id_2016_2017`
+
+--7) Calculate the average hours of each activity 
+
+SELECT 
+ AVG(very_active_minutes) AS Average_very_minutes,
+ AVG(fairly_active_minutes) AS Average_fairly_active_minutes,
+ AVG(lightly_active_minutes)/60 AS average_lightly_active_hours,
+ AVG(sedentary_minutes)/60 AS average_sedentary_hours
+FROM `capstone-case-study-377115.Data_fitbit.daily_activity_merged` 
+
+
+--8) Determine at what time users are most active
+
+SELECT
+DISTINCT hour AS activity_hour,  
+AVG(total_intensity) OVER (PARTITION BY hour) AS average_intensity,
+AVG(METs) OVER (PARTITION BY HOUR) AS average_METs
+FROM `capstone-case-study-377115.Data_fitbit.hourly_activity` AS hourly_activity
+INNER JOIN`capstone-case-study-377115.Data_fitbit.minute_METs_narrow_merged` AS METs_1
+ON
+ hourly_activity.id = METs_1.id AND
+ hourly_activity.hour = METs_1.activity_minute
+ORDER BY
+average_METs DESC
+
+
+Analyze
+Guiding questions
+•	 How should you organize your data to perform analysis on it?
+A/ I will organize my data by 3 categories to be able to make relationships between them. 
+o	Activity
+o	Sleep
+o	Weight
+•	 Has your data been properly formatted?
+•	A/ Yes, it has been.
+•	What surprises did you discover in the data?
+A/It seems that the users in this database have slight differences in activity levels depending on the day of the week. 
+•	What trends or relationships did you find in the data?
+A/ There might be some relationship between the activity, number of steps, and the sleep quality among the people in the database.
+On the other hand, there is a lack of interest by the people in the database to log their weight.
+•	How will these insights help answer your business questions?
+A/  
+o	By understanding the days of the week with most or /and less activity, the marketing team can tailor the days when it could be most effective to show ads send emails and notifications that can incentivize exercise and use of products and apps. 
+o	Finding benefits of exercise aside from the common weight measurement, like sleeping quality, might add a new topic to engage customers. Targeting adds to customers which internet use show late night online activity. 
+o	Identifying that people usually do not log their weight opens a new field of expansion. It could be the opportunity of designing a new product and offer a new service that can cover that necessity. 
+Analysis with R
+Set the invornment
+install.packages("tidyverse")
+## Installing package into '/cloud/lib/x86_64-pc-linux-gnu-library/4.2'
+## (as 'lib' is unspecified)
+install.packages("dplyr")
+## Installing package into '/cloud/lib/x86_64-pc-linux-gnu-library/4.2'
+## (as 'lib' is unspecified)
+install.packages("stats")
+## Installing package into '/cloud/lib/x86_64-pc-linux-gnu-library/4.2'
+## (as 'lib' is unspecified)
+## Warning: package 'stats' is a base package, and should not be updated
+install.packages("ggplot2")
+## Installing package into '/cloud/lib/x86_64-pc-linux-gnu-library/4.2'
+## (as 'lib' is unspecified)
+library(tidyverse)
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2
+## ──
+## ✔ ggplot2 3.4.1     ✔ purrr   1.0.1
+## ✔ tibble  3.1.8     ✔ dplyr   1.1.0
+## ✔ tidyr   1.3.0     ✔ stringr 1.5.0
+## ✔ readr   2.1.3     ✔ forcats 1.0.0
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+library(dplyr)
+library(stats)
+library(ggplot2)
+Upload dataset(s) and look at their structure with str()
+d_a_m <- read.csv("daily_activity_merged.csv")
+str(d_a_m)
+## 'data.frame':    940 obs. of  15 variables:
+##  $ id                        : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+##  $ activity_date             : chr  "4/12/2016" "4/13/2016" "4/14/2016" "4/15/2016" ...
+##  $ total_steps               : int  13162 10735 10460 9762 12669 9705 13019 15506 10544 9819 ...
+##  $ total_distance            : num  8.5 6.97 6.74 6.28 8.16 ...
+##  $ tracker_distance          : num  8.5 6.97 6.74 6.28 8.16 ...
+##  $ logged_activities_distance: num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ very_active_distance      : num  1.88 1.57 2.44 2.14 2.71 ...
+##  $ moderately_active_distance: num  0.55 0.69 0.4 1.26 0.41 ...
+##  $ light_active_distance     : num  6.06 4.71 3.91 2.83 5.04 ...
+##  $ sedentary_active_distance : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ very_active_minutes       : int  25 21 30 29 36 38 42 50 28 19 ...
+##  $ fairly_active_minutes     : int  13 19 11 34 10 20 16 31 12 8 ...
+##  $ lightly_active_minutes    : int  328 217 181 209 221 164 233 264 205 211 ...
+##  $ sedentary_minutes         : int  728 776 1218 726 773 539 1149 775 818 838 ...
+##  $ calories                  : int  1985 1797 1776 1745 1863 1728 1921 2035 1786 1775 ...
+Data transformation
+Formating date from “Character” to “date” & creating a new column to determine only the days of the week
+d_a_m$activity_date <- as.Date(d_a_m$activity_date, format = "%m/%d/%y")
+attach(d_a_m)
+class(d_a_m$activity_date)
+## [1] "Date"
+d_a_m$Day_of_Week = weekdays(d_a_m$activity_date)
+Summarice my variables
+d_a_m %>%
+  group_by(Day_of_Week) %>%
+  drop_na(Day_of_Week) %>%
+  summarise(mean(total_steps), sd(total_steps), median(total_steps))
+## # A tibble: 7 × 4
+##   Day_of_Week `mean(total_steps)` `sd(total_steps)` `median(total_steps)`
+##   <chr>                     <dbl>             <dbl>                 <dbl>
+## 1 Friday                    6933.             5644.                 6083 
+## 2 Monday                    7559.             4810.                 7317 
+## 3 Saturday                  7781.             4718.                 7626.
+## 4 Sunday                    8125.             4834.                 8411 
+## 5 Thursday                  8153.             5944.                 6946 
+## 6 Tuesday                   7406.             5008.                 7860 
+## 7 Wednesday                 7448.             4648.                 7408
+str(d_a_m)
+## 'data.frame':    940 obs. of  16 variables:
+##  $ id                        : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+##  $ activity_date             : Date, format: "2020-04-12" "2020-04-13" ...
+##  $ total_steps               : int  13162 10735 10460 9762 12669 9705 13019 15506 10544 9819 ...
+##  $ total_distance            : num  8.5 6.97 6.74 6.28 8.16 ...
+##  $ tracker_distance          : num  8.5 6.97 6.74 6.28 8.16 ...
+##  $ logged_activities_distance: num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ very_active_distance      : num  1.88 1.57 2.44 2.14 2.71 ...
+##  $ moderately_active_distance: num  0.55 0.69 0.4 1.26 0.41 ...
+##  $ light_active_distance     : num  6.06 4.71 3.91 2.83 5.04 ...
+##  $ sedentary_active_distance : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ very_active_minutes       : int  25 21 30 29 36 38 42 50 28 19 ...
+##  $ fairly_active_minutes     : int  13 19 11 34 10 20 16 31 12 8 ...
+##  $ lightly_active_minutes    : int  328 217 181 209 221 164 233 264 205 211 ...
+##  $ sedentary_minutes         : int  728 776 1218 726 773 539 1149 775 818 838 ...
+##  $ calories                  : int  1985 1797 1776 1745 1863 1728 1921 2035 1786 1775 ...
+##  $ Day_of_Week               : chr  "Sunday" "Monday" "Tuesday" "Wednesday" ...
+Plotting
+ggplot(data = na.omit(d_a_m))+
+  geom_col(mapping = aes(x = Day_of_Week, y = total_distance, fill = Day_of_Week))+
+  guides(x = "none")+ 
+  labs (x = "Days", y = "Total Distance")+
+  guides(y = guide_axis(angle = 45))+
+  labs (fill = "Day of The Week")
+ 
+
+Now we know that the days of more distance covered by the users are Sunday and Monday, and the days of the weeks that the users cover less distance are Friday and Saturday. Those two days may be best to target our customers with a marketing campaign to encourage them to exercise and use our services more.
+Upload dataset(s) and look at their structure with str()
+sleep<- read.csv("sleepDay_merged.csv")
+str(sleep)
+## 'data.frame':    413 obs. of  7 variables:
+##  $ id                  : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+##  $ sleep_day           : chr  "4/12/2016 0:00" "4/13/2016 0:00" "4/15/2016 0:00" "4/16/2016 0:00" ...
+##  $ total_sleep_records : int  1 2 1 2 1 1 1 1 1 1 ...
+##  $ total_minutes_asleep: int  327 384 412 340 700 304 360 325 361 430 ...
+##  $ total_time_inbed    : int  346 407 442 367 712 320 377 364 384 449 ...
+##  $ total_hours_asleep  : num  5.45 6.4 6.87 5.67 11.67 ...
+##  $ sleep_amount        : chr  "insufficient" "Sufficient" "Sufficient" "insufficient" ...
+Data transformation
+Combining the two data sets to look for insights between sleep and d_a_m. organizing it by “id”
+combined_data <- merge.data.frame(sleep, d_a_m, by = "id")
+n_distinct(combined_data$id)
+## [1] 24
+str(combined_data)
+## 'data.frame':    12441 obs. of  22 variables:
+##  $ id                        : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+##  $ sleep_day                 : chr  "4/12/2016 0:00" "4/12/2016 0:00" "4/12/2016 0:00" "4/12/2016 0:00" ...
+##  $ total_sleep_records       : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ total_minutes_asleep      : int  327 327 327 327 327 327 327 327 327 327 ...
+##  $ total_time_inbed          : int  346 346 346 346 346 346 346 346 346 346 ...
+##  $ total_hours_asleep        : num  5.45 5.45 5.45 5.45 5.45 5.45 5.45 5.45 5.45 5.45 ...
+##  $ sleep_amount              : chr  "insufficient" "insufficient" "insufficient" "insufficient" ...
+##  $ activity_date             : Date, format: "2020-05-07" "2020-05-06" ...
+##  $ total_steps               : int  11992 12159 10602 14673 13162 10735 15355 14070 13154 11181 ...
+##  $ total_distance            : num  7.71 8.03 6.81 9.25 8.5 ...
+##  $ tracker_distance          : num  7.71 8.03 6.81 9.25 8.5 ...
+##  $ logged_activities_distance: num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ very_active_distance      : num  2.46 1.97 2.29 3.56 1.88 ...
+##  $ moderately_active_distance: num  2.12 0.25 1.6 1.42 0.55 ...
+##  $ light_active_distance     : num  3.13 5.81 2.92 4.27 6.06 ...
+##  $ sedentary_active_distance : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ very_active_minutes       : int  37 24 33 52 25 21 73 45 48 16 ...
+##  $ fairly_active_minutes     : int  46 6 35 34 13 19 14 24 28 12 ...
+##  $ lightly_active_minutes    : int  175 289 246 217 328 217 216 250 189 243 ...
+##  $ sedentary_minutes         : int  833 754 730 712 728 776 814 857 782 815 ...
+##  $ calories                  : int  1821 1896 1820 1947 1985 1797 2013 1959 1898 1837 ...
+##  $ Day_of_Week               : chr  "Thursday" "Wednesday" "Friday" "Thursday" ...
+Plotting
+ggplot(data = combined_data, aes(x = sleep_amount, y = total_steps)) + 
+  geom_col(color= 'lightblue')+
+  guides(y = guide_axis(angle = 45))+
+  labs (x = "Amount of Sleep", y = "Total Steps")+
+  labs(title="Amount of sleep vs. Total Distance")
+  ###
+With this insight, we can use a campaign highlighting the possibility of having a “sufficient” amount of sleep related to an increase in the total of steps.
+Upload dataset(s) and look at their structure with str()
+weight <- read.csv("weightLogInfo_merged.csv")
+str(weight)
+## 'data.frame':    67 obs. of  9 variables:
+##  $ id              : num  1.50e+09 1.50e+09 1.93e+09 2.87e+09 2.87e+09 ...
+##  $ hour            : chr  "11:59:00 PM" "11:59:00 PM" "1:08:00 AM" "11:59:00 PM" ...
+##  $ date            : chr  "5/2/2016" "5/3/2016" "4/13/2016" "4/21/2016" ...
+##  $ weight_kg       : num  52.6 52.6 133.5 56.7 57.3 ...
+##  $ weight_pounds   : num  116 116 294 125 126 ...
+##  $ fat             : int  22 NA NA NA NA 25 NA NA NA NA ...
+##  $ BMI             : num  22.6 22.6 47.5 21.5 21.7 27.5 27.4 27.3 27.5 27.3 ...
+##  $ is_manual_report: logi  TRUE TRUE FALSE TRUE TRUE TRUE ...
+##  $ log_id          : num  1.46e+12 1.46e+12 1.46e+12 1.46e+12 1.46e+12 ...
+Data transformation
+Plotting
+ggplot(data = weight, aes(x = is_manual_report))+
+  geom_bar( color = 'lightpink', fill = 'lightpink')
+ 
+
+With this insight, I recommend impulsing new functionality with a new device (scale) to gather more information about weight accurately and automatically.
+Share
+•	Were you able to answer the business questions?
+A/ Yes
+•	What story does your data tell?
+A/ It tells the story about how my analysis can bring ideas to bring more customers to Bellabeat. 
+•	How do your findings relate to your original question?
+A/ They relate directly to the original question.
+•	Who is your audience? What is the best way to communicate with them?
+A/ My audience are high level corporate members and professionals in marketing. 
+•	Can data visualization help you share your findings?
+A/ Yes, viz were crucial to make my insights understandable.
+•	Is your presentation accessible to your audience?
+A/ I made sure to use contrasting colors that might be visually appealing to people with visual limitation, like color blind. 
+
+Act
+•	What is your final conclusion based on your analysis?
+A/ The final conclusion is that there is at least three ways to expand the market for Bellabeat from a marketing point of view. 
+•	How could your team and business apply your insights?
+A/ My insights might tailor a new marketing campaign. By determine the best days to post ads. As well as giving ideas to improve service and keep the customers engaged, finally, by identifying a new market opportunity that help with business expansion.  
+•	What next steps would you or your stakeholders take based on your findings?
+A/ I would survey Bellabeat costumers to determine if they would be interested in buying a new product that would complement their weight management needs. 
+Also, I recommend using original data for a next step analysis. 
+•	Is there additional data you could use to expand on your findings?
+A/ Yes, original costumer data. Marketing campaigns data. 
+
